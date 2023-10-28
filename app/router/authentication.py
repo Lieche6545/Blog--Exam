@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.schemas.authentication import SignUp
-from app.schemas.authentication import LogIn
+from app.schema.authentication import SignUp
+from app.schema.authentication import LogIn
 
 
 
