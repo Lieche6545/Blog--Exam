@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Depends
-from service import reusables_codes
+from service.blog import default_Codes
 from sqlalchemy.orm import Session
-from schema.models import Base, Blogs
-from database.database import engine
-from router.user_router import user_route
-from router.blog_router import blog_route
-from router.admin_router import admin_route
-from router.login_router import login_route
-from schema.article_schema import ShowBlog
+from schema.models import Blogs, User
+from database.db import engine, Base
+from router.user import user_route
+from router.blog import blog_route
+from router.admin import admin_route
+from router.login import login_route
+from schema.articles import ShowBlog
 from typing import List
 
 
@@ -16,7 +16,7 @@ description = """
 ### OVERVIEW
 * Welcome to my blog api. The fundamental concept is that 
 anyone visiting the website can be able to read a blog  
-post written by them or another user, but would be required to login before they can edit of deleted blog post
+post written by them or another user, but would be required to login before they can edit or delete a blog post
 *  The Blog application should have
 a user authentication where a user can create an account and login so that they could be able to
 create a blog, also the Blog should have the logout ability.
@@ -24,10 +24,10 @@ create a blog, also the Blog should have the logout ability.
 """
 
 contact = {
-    'name': 'Michael Eziefule',
-    'Student ID': 'ALT/SOE/022/5063',
-    'email': 'mike.eziefule@gmail.com',
-    'github': 'https://github.com/mike-eziefule'
+    'name': 'Victor Amaliechi',
+    'Student ID': 'ALT/SOE/022/5457',
+    'email': 'noblej.victor@gmail.com',
+    'github': 'https://github.com/Lieche6545'
 }
 
 
@@ -54,7 +54,7 @@ Base.metadata.create_all(bind=engine)
 
 #FastAPI Matadata.
 app = FastAPI(  
-    title='Ezzy Blog', 
+    title='Lieche Blog', 
     description = description,
     contact= contact,
     version= '0.0.1',
@@ -69,10 +69,6 @@ app.include_router(login_route, prefix='/login', tags=['Login'])
 
 #view aLL articles
 @app.get('/view_all', tags=['Home'], response_model= List[ShowBlog])
-def get_all_articles(db:Session=Depends(reusables_codes.get_db)):
+def get_all_articles(db:Session=Depends(default_Codes.get_db)):
     all_blogs = db.query(Blogs).all()
     return all_blogs
-
-
-if __name__ == "__main__":
-    uvicorn.run(app="main:app", reload=True)
